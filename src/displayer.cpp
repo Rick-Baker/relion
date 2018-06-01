@@ -560,6 +560,7 @@ int multiViewerCanvas::handle(int ev)
 						{ "Show helical layer line profile" },
 						{ "Show particles from selected classes" },
 						{ "Save selected classes" },
+						{ "Recenter and save selected classes" },
 						{ "Quit" },
 						{ 0 }
 					};
@@ -601,6 +602,12 @@ int multiViewerCanvas::handle(int ev)
 						saveBackupSelection();
 						saveSelected(SELECTED);
 						saveSelectedParticles(SELECTED);
+					}
+					else if ( strcmp(m->label(), "Recenter and save selected classes") == 0 )
+					{
+						saveBackupSelection();
+						saveSelected(SELECTED);
+						recenterSaveSelectedParticles(SELECTED);
 					}
 					else if ( strcmp(m->label(), "Quit") == 0 )
 						exit(0);
@@ -1042,6 +1049,58 @@ void multiViewerCanvas::makeStarFileSelectedParticles(bool selected, MetaDataTab
 
 }
 
+void multiViewerCanvas::recenterSaveSelectedParticles(bool save_selected)
+{
+	if (fn_selected_parts == "")
+	{
+		std::cout << " Not saving selected particles, as no filename was provided..." << std::endl;
+		return;
+	}
+	MetaDataTable MDpart;
+	makeStarFileSelectedParticles(save_selected, MDpart);
+	if (nr_regroups > 0)
+		regroupSelectedParticles(MDpart, *MDgroups, nr_regroups);
+	int nparts = MDpart.numberOfObjects();
+	if (nparts > 0)
+	{
+		MDpart.write(fn_selected_parts);
+		std::cout << "Saved "<< fn_selected_parts << " with " << nparts << " selected particles." << std::endl;
+	}
+	else
+		std::cout <<" No classes selected. Please select one or more classes..." << std::endl;
+
+	int myclass, nselected_classes = 0;
+        FileName fn_img;
+        std::vector<FileName> selectedFiles;
+	for (long int ipos = 0; ipos < boxes.size(); ipos++)
+	{
+	    if (boxes[ipos]->selected == SELECTED)
+		{
+		    nselected_classes++;
+		    // Get class number (may not be ipos+1 if resorted!)
+                    boxes[ipos]->MDimg.getValue(display_label, fn_img);
+                    selectedFiles.push_back(fn_img);
+                }
+	}
+	char cwd[1024];
+	if(getcwd(cwd, sizeof(cwd)) != NULL){
+		std::string scale = floatToString(ori_scale);
+		std::string cwdStr(cwd);
+		cwdStr += '/';
+		std::string command = "`which recenterClass.py` "+scale+" "+fn_selected_parts+" "+cwdStr;
+		for (int classes = 0; classes < selectedFiles.size(); classes++){
+		    command += " ";
+		    command += selectedFiles[classes];
+		}
+		command += " &";
+		std::cout << command << std::endl;
+		int res = system(command.c_str());
+	}
+	else{
+		perror("Error: couldn't get working directory");
+	}
+}
+
 void multiViewerCanvas::saveSelectedParticles(bool save_selected)
 {
 	if (fn_selected_parts == "")
@@ -1073,6 +1132,7 @@ void multiViewerCanvas::saveSelectedParticles(bool save_selected)
 	}
 	else
 		std::cout <<" No classes selected. Please select one or more classes..." << std::endl;
+
 }
 
 void regroupSelectedParticles(MetaDataTable &MDdata, MetaDataTable &MDgroups, int nr_regroups)
@@ -2339,7 +2399,6 @@ int Displayer::run()
 
         Image<RFLOAT> img;
         img.read(fn_in); // dont read data yet: only header to get size
-
         if (lowpass > 0.)
         	lowPassFilterMap(img(), lowpass, angpix);
         if (highpass > 0.)

@@ -247,6 +247,7 @@ foreach (SCRIPT_FILE ${RELION_SCRIPT_FILES})
                      copy ${CMAKE_SOURCE_DIR}/scripts/${SCRIPT_FILE} 
                      ${CMAKE_BINARY_DIR}/bin/relion_${SCRIPT_FILE} )
 endforeach()
+configure_file(${CMAKE_SOURCE_DIR}/scripts/recenterClass.py ${CMAKE_BINARY_DIR}/bin/recenterClass.py COPYONLY)
 install( DIRECTORY ${CMAKE_BINARY_DIR}/bin
 	 DESTINATION ${CMAKE_INSTALL_PREFIX}
          USE_SOURCE_PERMISSIONS

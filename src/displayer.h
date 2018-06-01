@@ -42,6 +42,9 @@
 #include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Text_Display.H>
 
+#include <string>
+#include <iostream>
+
 #define GUI_BACKGROUND_COLOR (fl_rgb_color(240,240,240))
 #define GUI_INPUT_COLOR (fl_rgb_color(255,255,230))
 #define GUI_RUNBUTTON_COLOR (fl_rgb_color(0, 130, 0))
@@ -250,6 +253,7 @@ private:
 	void showHelicalLayerLineProfile(int ipos);
 	void makeStarFileSelectedParticles(bool save_selected, MetaDataTable &MDpart);
 	void saveSelectedParticles(bool save_selected);
+	void recenterSaveSelectedParticles(bool save_selected);
 	void showSelectedParticles(bool save_selected);
 	void saveTrainingSet();
 	void saveSelected(bool save_selected);
