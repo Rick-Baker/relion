@@ -18,6 +18,9 @@ def load_star_file(fileName):
 
 # from https://stackoverflow.com/questions/1158076/implement-touch-using-python
 def touch(fname, times=None):
+    basedir = os.path.dirname(fname)
+    if not os.path.exists(basedir):
+        os.makedirs(basedir)
     fhandle = open(fname, 'a')
     try:
         os.utime(fname, times)
