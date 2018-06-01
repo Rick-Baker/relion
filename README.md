@@ -76,4 +76,4 @@ make install    # (or "sudo make install")
 
 ## Known bug
 
-If the user applied shift could place the center of the particle outside of the boundary of the micrograph, Relion will throw an errer during particle extraction. This will be fixed in a later update. Right now, the user can simply delete the offending particles from the particles-date-time.star file.
+If the user applied shift would place the center of the particle outside of the boundary of the micrograph, Relion will throw an errer during particle extraction. This will be fixed in a later update. Right now, the user can simply delete the offending particles from the particles-date-time.star file.
