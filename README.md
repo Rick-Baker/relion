@@ -1,5 +1,7 @@
 This is a fork of the original relion from https://github.com/3dem/relion/
+
 It adds a new feature in the "relion_display" program to select classes and "Recenter and save" them.
+
 Recentered classes are saved as "Select/jobXXX/particles-recenter-year-month-day--hour-minute-second.star"
 
 RELION
