@@ -1,6 +1,6 @@
 This is a fork of the original relion from https://github.com/3dem/relion/
 
-It adds a new feature in the "relion_display" program to select classes and "Recenter and save" them. Recentered classes are saved as "Select/jobXXX/particles-recenter-year-month-day--hour-minute-second.star"
+It adds a new feature in the "relion_display" program to select classes and "Recenter and save" them. This function opens each selected class average one-by-one in a new GUI, waits for the user to mouse-click the center of the class average, and writes a new particles.star file with the user-inputed shifts accounted for in the rlnOriginX and rlnOriginY columns. Recentered classes are saved as "Select/jobXXX/particles-recenter-year-month-day--hour-minute-second.star" alongside the original particles.star file in the Select/jobxxx folder.
 
 RELION
 ======
@@ -73,3 +73,7 @@ make -j4
 make install    # (or "sudo make install")
 
 ```
+
+## Known bug
+
+If the user applied shift could place the center of the particle outside of the boundary of the micrograph, Relion will throw an errer during particle extraction. This will be fixed in a later update. Right now, the user can simply delete the offending particles from the particles-date-time.star file.
