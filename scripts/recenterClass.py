@@ -16,10 +16,17 @@ def load_star_file(fileName):
     loadFile.close()
     return data
 
+# from https://stackoverflow.com/questions/1158076/implement-touch-using-python
+def touch(fname, times=None):
+    fhandle = open(fname, 'a')
+    try:
+        os.utime(fname, times)
+    finally:
+        fhandle.close()
+	
 def write_star_file(data, particleCount, workingDir, fileName):
     writeFileName = workingDir+fileName[:-5]+strftime("-recenter-%Y-%m-%d--%H-%M-%S", gmtime())+".star"
     nodeWriteFileName = workingDir+".Nodes/3/"+fileName[:-5]+strftime("-recenter-%Y-%m-%d--%H-%M-%S", gmtime())+".star"
-    os.mknod(nodeWriteFileName)
     writeFile = open(writeFileName,'w')
     for line in data:
         writeFile.write(line)
@@ -30,7 +37,8 @@ def write_star_file(data, particleCount, workingDir, fileName):
     print "New Starfile created at "+ writeFileName
     print "*********************************************************************************************"
     print "A total of " + str(particleCount) + " particles were selected"
-
+    touch(nodeWriteFileName)
+	
 # Arguments of the form:
 # imageScale pathOfStarFile selectedClass1 selectedClass2 ... selectedClassN 
 def load_arguements():
