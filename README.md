@@ -41,7 +41,7 @@ sudo apt install git
 
 Once git and cmake are installed, relion can be easily installed through
 ```
-git clone https://github.com/3dem/relion.git
+git clone https://github.com/Rick-Baker/relion-recenter.git
 cd relion
 mkdir build
 cd build
